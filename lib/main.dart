@@ -1,6 +1,7 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:namer_app/big_card.dart';
+import 'package:namer_app/favourites_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -44,7 +45,6 @@ class MyAppState extends ChangeNotifier {
       favourites.add(current);
     }
     notifyListeners();
-    print(favourites);
   }
 }
 
@@ -60,12 +60,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
     Widget page;
     switch (selectedIndex) {
       case 0:
         page = GeneratorPage();
       case 1:
-        page = Placeholder();
+        page = FavouritesPage(favourites: appState.favourites);
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }

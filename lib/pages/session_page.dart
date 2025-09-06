@@ -1,14 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:pomodoro_coffee/pages/results_page.dart';
 
 class SessionPage extends StatefulWidget {
+  const SessionPage({super.key});
+
   @override
-  _SessionPageState createState() => _SessionPageState();
+  SessionPageState createState() => SessionPageState();
 }
 
-class _SessionPageState extends State<SessionPage> {
+class SessionPageState extends State<SessionPage> {
   Timer? _timer;
   int _remainingSeconds = 10;
 

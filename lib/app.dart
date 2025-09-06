@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_coffee/app_state.dart';
+import 'package:pomodoro_coffee/pages/results_page.dart';
+import 'package:pomodoro_coffee/pages/session_page.dart';
+import 'package:pomodoro_coffee/pages/setup_page.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
@@ -15,7 +18,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: Text('Flutter Demo Home Page'),
+        routes: {
+          '/': (context) => SetupPage(),
+          '/session': (context) => SessionPage(),
+          '/results': (context) => ResultsPage(),
+        },
       ),
     );
   }

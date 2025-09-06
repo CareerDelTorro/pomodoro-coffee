@@ -1,0 +1,15 @@
+import 'package:flutter/material.dart';
+
+class SetupPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => {Navigator.pushNamed(context, '/session')},
+          child: Text("Start"),
+        ),
+      ),
+    );
+  }
+}

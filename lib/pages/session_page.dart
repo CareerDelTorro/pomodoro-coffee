@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pomodoro_coffee/app_state.dart';
 import 'package:pomodoro_coffee/widgets/top_bar.dart';
 import 'package:provider/provider.dart';
@@ -228,6 +229,12 @@ class SessionPageState extends State<SessionPage> {
                     Navigator.pushNamed(context, '/');
                   },
                   child: Text('Back to Setup'),
+                ),
+                SizedBox(height: 40),
+                Lottie.asset(
+                  'assets/pathtree.json',
+                  width: double.infinity,
+                  fit: BoxFit.fitWidth,
                 ),
               ],
             ),

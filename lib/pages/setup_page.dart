@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pomodoro_coffee/app_state.dart';
 
-class SetupPage extends StatefulWidget {
+class SetupPage extends StatelessWidget {
   const SetupPage({super.key});
 
   @override
-  State<SetupPage> createState() => _SetupPageState();
-}
-
-class _SetupPageState extends State<SetupPage> {
-  int workDuration = 25;
-  int breakDuration = 5;
-
-  @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -22,14 +18,13 @@ class _SetupPageState extends State<SetupPage> {
               min: 10,
               max: 60,
               divisions: 10,
-              value: workDuration.toDouble(),
-              onChanged: (newValue) => {
-                workDuration = newValue.toInt(),
-                setState(() {}),
+              value: appState.workDuration.toDouble(),
+              onChanged: (newValue) {
+                appState.setWorkDuration(newValue.toInt());
               },
             ),
             SizedBox(height: 20),
-            Text('Work Duration: $workDuration minutes'),
+            Text('Work Duration: ${appState.workDuration} minutes'),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/session'),

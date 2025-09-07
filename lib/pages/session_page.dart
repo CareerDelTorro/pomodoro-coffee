@@ -95,7 +95,7 @@ class SessionPageState extends State<SessionPage> {
 
   void changeBackgroundColour(TimerMode mode) {
     setState(() {
-      backgroundColor = mode == TimerMode.workTime ? Colors.red : Colors.green;
+      backgroundColor = mode == TimerMode.workTime ? const Color(0xFFFAF8F4) : const Color(0xFF4AA5C1);
     });
   }
 
@@ -193,8 +193,8 @@ class SessionPageState extends State<SessionPage> {
                           backgroundColor: Colors.white24,
                           valueColor: AlwaysStoppedAnimation<Color>(
                             _currentMode == TimerMode.workTime
-                                ? const Color.fromARGB(255, 193, 54, 244)
-                                : const Color.fromARGB(255, 54, 48, 157),
+                                ? const Color(0xFF4AA5C1)
+                                : const Color(0xFF3630A1),
                           ),
                         ),
                       ),

@@ -28,7 +28,7 @@ class SessionPageState extends State<SessionPage>
 
   void setTimer(int durationMin) {
     setState(() {
-      _remainingSecondsSession = durationMin;
+      _remainingSecondsSession = durationMin * 60;
     });
   }
 
@@ -140,14 +140,14 @@ class SessionPageState extends State<SessionPage>
       case TimerMode.workTime:
         totalTimeLeftSecs =
             _remainingSecondsSession +
-            ((appState.workDuration + 1) * (numSessionsLeft - 1)) +
-            ((appState.breakDuration + 1) * (numSessionsLeft - 1));
+            ((appState.workDuration * 60 + 1) * (numSessionsLeft - 1)) +
+            ((appState.breakDuration * 60 + 1) * (numSessionsLeft - 1));
         break;
       case TimerMode.breakTime:
         totalTimeLeftSecs =
             _remainingSecondsSession +
-            ((appState.workDuration + 1) * numSessionsLeft) +
-            ((appState.breakDuration + 1) * (numSessionsLeft - 1));
+            ((appState.workDuration * 60 + 1) * numSessionsLeft) +
+            ((appState.breakDuration * 60 + 1) * (numSessionsLeft - 1));
         break;
     }
 
@@ -214,8 +214,8 @@ class SessionPageState extends State<SessionPage>
     double progress =
         _remainingSecondsSession /
         (_currentMode == TimerMode.workTime
-            ? appState.workDuration
-            : appState.breakDuration);
+            ? appState.workDuration * 60
+            : appState.breakDuration * 60);
 
     return Scaffold(
       backgroundColor: backgroundColor,

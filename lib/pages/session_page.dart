@@ -58,9 +58,6 @@ class SessionPageState extends State<SessionPage> {
       switchMode(_currentMode);
     } else {
       _timer?.cancel();
-      setState(() {
-        isRunning = false;
-      });
       Navigator.pushNamed(context, '/results');
     }
   }
@@ -96,23 +93,29 @@ class SessionPageState extends State<SessionPage> {
 
     /*
     * Explicitly separating the calculation for readability
+    * Adding 1 second to each work and break duration to account for the transition second
     */
     switch (_currentMode) {
       case TimerMode.workTime:
         totalTimeLeftSecs =
             _remainingSecondsSession +
-            (appState.workDuration * (numSessionsLeft - 1)) +
-            (appState.breakDuration * (numSessionsLeft - 1));
+            ((appState.workDuration + 1) * (numSessionsLeft - 1)) +
+            ((appState.breakDuration + 1) * (numSessionsLeft - 1));
         break;
       case TimerMode.breakTime:
         totalTimeLeftSecs =
             _remainingSecondsSession +
-            (appState.workDuration * numSessionsLeft) +
-            (appState.breakDuration * (numSessionsLeft - 1));
+            ((appState.workDuration + 1) * numSessionsLeft) +
+            ((appState.breakDuration + 1) * (numSessionsLeft - 1));
         break;
     }
 
     return totalTimeLeftSecs;
+  }
+
+  String formatTime(DateTime time) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    return "${twoDigits(time.hour)}:${twoDigits(time.minute)}:${twoDigits(time.second)}";
   }
 
   String get timerText {
@@ -144,6 +147,10 @@ class SessionPageState extends State<SessionPage> {
         ? ElevatedButton(onPressed: pauseTimer, child: Text('Pause'))
         : ElevatedButton(onPressed: startTimer, child: Text('Play'));
 
+    DateTime expectedFinishTime = DateTime.now().add(
+      Duration(seconds: calculateTotalTimeLeftInSeconds()),
+    );
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Center(
@@ -160,6 +167,7 @@ class SessionPageState extends State<SessionPage> {
               style: TextStyle(fontSize: 24),
             ),
             playPauseButton,
+            Text("Expected finish time: ${formatTime(expectedFinishTime)}"),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pomodoro_coffee/app_state.dart';
+import 'package:pomodoro_coffee/widgets/top_bar.dart';
 import 'package:provider/provider.dart';
 
 class SessionPage extends StatefulWidget {
@@ -164,33 +165,41 @@ class SessionPageState extends State<SessionPage> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(timerText, style: TextStyle(fontSize: 48)),
-            Text(
-              _currentMode == TimerMode.workTime ? 'Work Time' : 'Break Time',
-              style: TextStyle(fontSize: 24),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TopBar(height: 24, color: Colors.deepPurple),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(timerText, style: TextStyle(fontSize: 48)),
+                Text(
+                  _currentMode == TimerMode.workTime
+                      ? 'Work Time'
+                      : 'Break Time',
+                  style: TextStyle(fontSize: 24),
+                ),
+                Text(
+                  'Session ${appState.numSessionsTotal + 1 - numSessionsLeft} / ${appState.numSessionsTotal}',
+                  style: TextStyle(fontSize: 24),
+                ),
+                playPauseButton,
+                Text("Expected finish time: ${formatTime(expectedFinishTime)}"),
+                ElevatedButton(
+                  onPressed: resetCurrentTimer,
+                  child: Text('Reset current session'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/');
+                  },
+                  child: Text('Back to Setup'),
+                ),
+              ],
             ),
-            Text(
-              'Session ${appState.numSessionsTotal + 1 - numSessionsLeft} / ${appState.numSessionsTotal}',
-              style: TextStyle(fontSize: 24),
-            ),
-            playPauseButton,
-            Text("Expected finish time: ${formatTime(expectedFinishTime)}"),
-            ElevatedButton(
-              onPressed: resetCurrentTimer,
-              child: Text('Reset current session'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/');
-              },
-              child: Text('Back to Setup'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

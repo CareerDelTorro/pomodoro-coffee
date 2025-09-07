@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_coffee/app_state.dart';
+import 'package:pomodoro_coffee/widgets/top_bar.dart';
 import 'package:provider/provider.dart';
 
 class ResultsPage extends StatelessWidget {
@@ -9,22 +10,28 @@ class ResultsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Use appState to access shared state
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Congratulations! You completed ${Provider.of<AppState>(context, listen: false).numSessionsTotal} sessions.',
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TopBar(height: 120, color: Colors.deepPurple, text: 'Complete'),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Congratulations! You completed ${Provider.of<AppState>(context, listen: false).numSessionsTotal} sessions.',
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/');
+                  },
+                  child: Text('Back to Setup'),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/');
-              },
-              child: Text('Back to Setup'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

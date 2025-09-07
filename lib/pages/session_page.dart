@@ -12,7 +12,7 @@ class SessionPage extends StatefulWidget {
 
 class SessionPageState extends State<SessionPage> {
   Timer? _timer;
-  int _remainingSeconds = 0;
+  int _remainingSecondsSession = 0;
   TimerMode _currentMode = TimerMode.workTime;
   int numSessionsLeft = 0;
   Color backgroundColor = Colors.red;
@@ -20,7 +20,7 @@ class SessionPageState extends State<SessionPage> {
 
   void setTimer(int durationMin) {
     setState(() {
-      _remainingSeconds = durationMin;
+      _remainingSecondsSession = durationMin;
     });
   }
 
@@ -32,9 +32,9 @@ class SessionPageState extends State<SessionPage> {
     });
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_remainingSeconds > 0) {
+      if (_remainingSecondsSession > 0) {
         setState(() {
-          _remainingSeconds--;
+          _remainingSecondsSession--;
         });
       } else {
         resolveTimerEnd();
@@ -89,9 +89,35 @@ class SessionPageState extends State<SessionPage> {
     });
   }
 
+  int calculateTotalTimeLeftInSeconds() {
+    final appState = Provider.of<AppState>(context, listen: false);
+
+    int totalTimeLeftSecs = 0;
+
+    /*
+    * Explicitly separating the calculation for readability
+    */
+    switch (_currentMode) {
+      case TimerMode.workTime:
+        totalTimeLeftSecs =
+            _remainingSecondsSession +
+            (appState.workDuration * (numSessionsLeft - 1)) +
+            (appState.breakDuration * (numSessionsLeft - 1));
+        break;
+      case TimerMode.breakTime:
+        totalTimeLeftSecs =
+            _remainingSecondsSession +
+            (appState.workDuration * numSessionsLeft) +
+            (appState.breakDuration * (numSessionsLeft - 1));
+        break;
+    }
+
+    return totalTimeLeftSecs;
+  }
+
   String get timerText {
-    final minutes = (_remainingSeconds ~/ 60).toString().padLeft(2, '0');
-    final seconds = (_remainingSeconds % 60).toString().padLeft(2, '0');
+    final minutes = (_remainingSecondsSession ~/ 60).toString().padLeft(2, '0');
+    final seconds = (_remainingSecondsSession % 60).toString().padLeft(2, '0');
     return '$minutes:$seconds';
   }
 

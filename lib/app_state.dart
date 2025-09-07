@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppState extends ChangeNotifier {
   int workDuration = 25;
   int breakDuration = 5;
-  int numSessions = 4;
+  int numSessionsTotal = 4;
 
   void setWorkDuration(int value) {
     workDuration = value;
@@ -16,7 +16,7 @@ class AppState extends ChangeNotifier {
   }
 
   void setNumSessions(int value) {
-    numSessions = value;
+    numSessionsTotal = value;
     notifyListeners();
   }
 }

@@ -46,7 +46,7 @@ class SetupPage extends StatelessWidget {
                     ),
                   )
                   .toList(),
-              value: appState.numSessions,
+              value: appState.numSessionsTotal,
               onChanged: (newValue) {
                 if (newValue != null) {
                   appState.setNumSessions(newValue);

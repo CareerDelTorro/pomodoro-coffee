@@ -16,13 +16,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Pomodoro Coffee',
         theme: ThemeData(
-    primaryColor: Color(0xFF3630A1), // Replace with your hex color
-    colorScheme: ColorScheme.fromSwatch().copyWith(
-      primary: Color(0xFF3630A1), // Your custom color
-      secondary: Color(0xFFFAF8F4), // Optional: accent color
-    ),
-    // ...other theme settings...
-  ),
+          primaryColor: Color(0xFF3560A1), // Replace with your hex color
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: Color.fromARGB(255, 53, 96, 161), // Your custom color
+            secondary: Color(0xFFFAF8F4), // Optional: accent color
+          ),
+          // ...other theme settings...
+        ),
         routes: {
           '/': (context) => SetupPage(),
           '/session': (context) => SessionPage(),

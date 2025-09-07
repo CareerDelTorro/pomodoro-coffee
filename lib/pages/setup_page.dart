@@ -32,6 +32,12 @@ class SetupPage extends StatelessWidget {
                   onChanged: (newValue) {
                     appState.setWorkDuration(newValue.toInt());
                   },
+                  inactiveColor: Color.fromARGB(
+                    255,
+                    238,
+                    242,
+                    244,
+                  ), // <-- Add this line
                 ),
                 SizedBox(height: 20),
 
@@ -44,6 +50,7 @@ class SetupPage extends StatelessWidget {
                   onChanged: (newValue) {
                     appState.setBreakDuration(newValue.toInt());
                   },
+                  inactiveColor: Color.fromARGB(255, 238, 242, 244),
                 ),
                 SizedBox(height: 20),
                 Text('Number of Sessions:'),
@@ -65,10 +72,15 @@ class SetupPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () => Navigator.pushNamed(context, '/session'),
-                    style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary, // Uses primary color
-                    foregroundColor: Colors.white, // Text color
-        ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        16,
+                      ), // Lower value = less round
+                    ),
+                  ),
                   child: Text("Begin"),
                 ),
               ],

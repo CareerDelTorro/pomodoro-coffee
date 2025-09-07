@@ -242,16 +242,24 @@ class SessionPageState extends State<SessionPage> {
                       ? 'Focus Time'
                       : 'Break Time',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     color: _currentMode == TimerMode.workTime
                         ? Color(0xFF4AA5C1)
                         : Color(0xFFFAF8F4),
                   ),
                 ),
-                SizedBox(height: 40),
-                Text("Wrap up at ${formatTime(expectedFinishTime)}"),
+                //SizedBox(height: 10),
+                Text(
+                  "Wrap up at ${formatTime(expectedFinishTime)}",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: _currentMode == TimerMode.workTime
+                        ? Color(0xFF4AA5C1)
+                        : Color(0xFFFAF8F4),
+                  ),
+                ),
+                SizedBox(height: 10),
 
-                SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -272,6 +280,7 @@ class SessionPageState extends State<SessionPage> {
                     playPauseButton,
                   ],
                 ),
+                SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/');

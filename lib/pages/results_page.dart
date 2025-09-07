@@ -13,20 +13,29 @@ class ResultsPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TopBar(height: 120, color: Colors.deepPurple, text: 'Complete'),
+          TopBar(height: 120, color: Color(0xFF4AA5C1), text: 'Complete'),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Congratulations! You completed ${Provider.of<AppState>(context, listen: false).numSessionsTotal} sessions.',
+                  'Well done! You completed ${Provider.of<AppState>(context, listen: false).numSessionsTotal} sessions.',
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        16,
+                      ), // Lower value = less round
+                    ),
+                  ),
                   onPressed: () {
                     Navigator.pushNamed(context, '/');
                   },
-                  child: Text('Back to Setup'),
+                  child: Text('Begin Again'),
                 ),
               ],
             ),

@@ -163,6 +163,12 @@ class SessionPageState extends State<SessionPage> {
       Duration(seconds: calculateTotalTimeLeftInSeconds()),
     );
 
+    double progress =
+        _remainingSecondsSession /
+        (_currentMode == TimerMode.workTime
+            ? appState.workDuration
+            : appState.breakDuration);
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Column(
@@ -173,7 +179,34 @@ class SessionPageState extends State<SessionPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(timerText, style: TextStyle(fontSize: 48)),
+                SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox.expand(
+                        child: CircularProgressIndicator(
+                          value: progress,
+                          strokeWidth: 10,
+                          backgroundColor: Colors.white24,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            _currentMode == TimerMode.workTime
+                                ? const Color.fromARGB(255, 193, 54, 244)
+                                : const Color.fromARGB(255, 54, 48, 157),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        timerText,
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Text(
                   _currentMode == TimerMode.workTime
                       ? 'Work Time'

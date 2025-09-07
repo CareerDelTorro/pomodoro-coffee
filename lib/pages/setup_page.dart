@@ -16,14 +16,14 @@ class SetupPage extends StatelessWidget {
         children: [
           TopBar(
             height: 120,
-            color: Colors.deepPurple,
+            color: const Color(0xFF4AA5C1),
             text: 'Pomodoro Coffee',
           ),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Set Work Duration (minutes): ${appState.workDuration}'),
+                Text('Focus Duration: ${appState.workDuration} minutes'),
                 Slider(
                   min: 10,
                   max: 60,
@@ -35,7 +35,7 @@ class SetupPage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
 
-                Text('Set Break Duration (minutes): ${appState.breakDuration}'),
+                Text('Break Duration: ${appState.breakDuration} minutes'),
                 Slider(
                   min: 5,
                   max: 30,
@@ -46,7 +46,7 @@ class SetupPage extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 20),
-                Text('Set Number of Sessions:'),
+                Text('Number of Sessions:'),
                 DropdownButton(
                   items: List.generate(5, (index) => index + 1)
                       .map(
@@ -65,7 +65,11 @@ class SetupPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () => Navigator.pushNamed(context, '/session'),
-                  child: Text("Start"),
+                    style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary, // Uses primary color
+                    foregroundColor: Colors.white, // Text color
+        ),
+                  child: Text("Begin"),
                 ),
               ],
             ),

@@ -175,11 +175,17 @@ class SessionPageState extends State<SessionPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TopBar(height: 24, color: Colors.deepPurple),
+          TopBar(height: 50, color: Color(0xFF4AA5C1)),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+            
+                Text(
+                  'Session ${appState.numSessionsTotal + 1 - numSessionsLeft} of ${appState.numSessionsTotal}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(height: 30),
                 SizedBox(
                   width: 200,
                   height: 200,
@@ -194,7 +200,7 @@ class SessionPageState extends State<SessionPage> {
                           valueColor: AlwaysStoppedAnimation<Color>(
                             _currentMode == TimerMode.workTime
                                 ? const Color(0xFF4AA5C1)
-                                : const Color(0xFF3630A1),
+                                : const Color(0xFFFAF8F4),
                           ),
                         ),
                       ),
@@ -203,6 +209,10 @@ class SessionPageState extends State<SessionPage> {
                         style: TextStyle(
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
+                          //AN add colour for break time here.
+                          color: _currentMode == TimerMode.workTime
+                              ? Color(0xFF4AA5C1)
+                              : Color(0xFFFAF8F4),
                         ),
                       ),
                     ],
@@ -210,14 +220,11 @@ class SessionPageState extends State<SessionPage> {
                 ),
                 Text(
                   _currentMode == TimerMode.workTime
-                      ? 'Work Time'
+                      ? 'Focus Time'
                       : 'Break Time',
                   style: TextStyle(fontSize: 24),
                 ),
-                Text(
-                  'Session ${appState.numSessionsTotal + 1 - numSessionsLeft} / ${appState.numSessionsTotal}',
-                  style: TextStyle(fontSize: 24),
-                ),
+
                 playPauseButton,
                 Text("Expected finish time: ${formatTime(expectedFinishTime)}"),
                 ElevatedButton(

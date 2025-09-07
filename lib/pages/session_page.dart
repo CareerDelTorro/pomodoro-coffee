@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pomodoro_coffee/app_state.dart';
@@ -20,6 +21,8 @@ class SessionPageState extends State<SessionPage> {
   Color backgroundColor = Colors.red;
   bool isRunning = false;
 
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
   void setTimer(int durationMin) {
     setState(() {
       _remainingSecondsSession = durationMin;
@@ -34,6 +37,16 @@ class SessionPageState extends State<SessionPage> {
     });
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      // account for 1s delay in the audio file
+      if (_remainingSecondsSession == 31) {
+        _audioPlayer.play(AssetSource('long-warning.wav'));
+      }
+      if (_remainingSecondsSession == 10) {
+        _audioPlayer.play(AssetSource('slow-countdown.wav'));
+      }
+      if (_remainingSecondsSession == 2) {
+        _audioPlayer.play(AssetSource('fast-countdown.wav'));
+      }
       if (_remainingSecondsSession > 0) {
         setState(() {
           _remainingSecondsSession--;
@@ -77,6 +90,9 @@ class SessionPageState extends State<SessionPage> {
 
   void switchMode(TimerMode mode) {
     final appState = Provider.of<AppState>(context, listen: false);
+
+    _audioPlayer.play(AssetSource('switch-warning.wav'));
+
     switch (_currentMode) {
       case TimerMode.workTime:
         _currentMode = TimerMode.breakTime;
@@ -95,7 +111,9 @@ class SessionPageState extends State<SessionPage> {
 
   void changeBackgroundColour(TimerMode mode) {
     setState(() {
-      backgroundColor = mode == TimerMode.workTime ? const Color(0xFFFAF8F4) : const Color(0xFF4AA5C1);
+      backgroundColor = mode == TimerMode.workTime
+          ? const Color(0xFFFAF8F4)
+          : const Color(0xFF4AA5C1);
     });
   }
 
@@ -180,7 +198,6 @@ class SessionPageState extends State<SessionPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-            
                 Text(
                   'Session ${appState.numSessionsTotal + 1 - numSessionsLeft} of ${appState.numSessionsTotal}',
                   style: TextStyle(fontSize: 20),

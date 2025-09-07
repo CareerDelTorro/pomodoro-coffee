@@ -16,6 +16,7 @@ class SessionPageState extends State<SessionPage> {
   TimerMode _currentMode = TimerMode.workTime;
   int numSessionsLeft = 0;
   Color backgroundColor = Colors.red;
+  bool isRunning = false;
 
   void setTimer(int durationMin) {
     setState(() {
@@ -25,6 +26,11 @@ class SessionPageState extends State<SessionPage> {
 
   void startTimer() {
     _timer?.cancel();
+
+    setState(() {
+      isRunning = true;
+    });
+
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_remainingSeconds > 0) {
         setState(() {
@@ -36,6 +42,14 @@ class SessionPageState extends State<SessionPage> {
     });
   }
 
+  void pauseTimer() {
+    _timer?.cancel();
+    setState(() {
+      isRunning = false;
+    });
+    ;
+  }
+
   void resolveTimerEnd() {
     if (_currentMode == TimerMode.workTime) {
       numSessionsLeft--;
@@ -44,6 +58,9 @@ class SessionPageState extends State<SessionPage> {
       switchMode(_currentMode);
     } else {
       _timer?.cancel();
+      setState(() {
+        isRunning = false;
+      });
       Navigator.pushNamed(context, '/results');
     }
   }
@@ -67,7 +84,9 @@ class SessionPageState extends State<SessionPage> {
   }
 
   void changeBackgroundColour(TimerMode mode) {
-    backgroundColor = mode == TimerMode.workTime ? Colors.red : Colors.green;
+    setState(() {
+      backgroundColor = mode == TimerMode.workTime ? Colors.red : Colors.green;
+    });
   }
 
   String get timerText {
@@ -95,6 +114,10 @@ class SessionPageState extends State<SessionPage> {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
 
+    Widget playPauseButton = isRunning
+        ? ElevatedButton(onPressed: pauseTimer, child: Text('Pause'))
+        : ElevatedButton(onPressed: startTimer, child: Text('Play'));
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Center(
@@ -110,6 +133,7 @@ class SessionPageState extends State<SessionPage> {
               'Session ${appState.numSessionsTotal + 1 - numSessionsLeft} / ${appState.numSessionsTotal}',
               style: TextStyle(fontSize: 24),
             ),
+            playPauseButton,
           ],
         ),
       ),

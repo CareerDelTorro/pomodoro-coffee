@@ -175,8 +175,24 @@ class SessionPageState extends State<SessionPage> {
     final appState = Provider.of<AppState>(context);
 
     Widget playPauseButton = isRunning
-        ? ElevatedButton(onPressed: pauseTimer, child: Text('Pause'))
-        : ElevatedButton(onPressed: startTimer, child: Text('Play'));
+        ? ElevatedButton(
+            onPressed: pauseTimer,
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(20),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+            ),
+            child: const Icon(Icons.pause, color: Colors.white, size: 32),
+          )
+        : ElevatedButton(
+            onPressed: startTimer,
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(20),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+            ),
+            child: const Icon(Icons.play_arrow, color: Colors.white, size: 32),
+          );
 
     DateTime expectedFinishTime = DateTime.now().add(
       Duration(seconds: calculateTotalTimeLeftInSeconds()),
@@ -194,6 +210,7 @@ class SessionPageState extends State<SessionPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TopBar(height: 50, color: Color(0xFF4AA5C1)),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -235,18 +252,41 @@ class SessionPageState extends State<SessionPage> {
                     ],
                   ),
                 ),
+                SizedBox(height: 20),
                 Text(
                   _currentMode == TimerMode.workTime
                       ? 'Focus Time'
                       : 'Break Time',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: _currentMode == TimerMode.workTime
+                        ? Color(0xFF4AA5C1)
+                        : Color(0xFFFAF8F4),
+                  ),
                 ),
+                SizedBox(height: 40),
+                Text("Wrap up at ${formatTime(expectedFinishTime)}"),
 
-                playPauseButton,
-                Text("Expected finish time: ${formatTime(expectedFinishTime)}"),
-                ElevatedButton(
-                  onPressed: resetCurrentTimer,
-                  child: Text('Reset current session'),
+                SizedBox(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: resetCurrentTimer,
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(20),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                      ),
+                      child: const Icon(
+                        Icons.refresh,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                    SizedBox(width: 24), // Space between buttons
+                    playPauseButton,
+                  ],
                 ),
                 ElevatedButton(
                   onPressed: () {

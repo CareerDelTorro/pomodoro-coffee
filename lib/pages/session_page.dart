@@ -15,6 +15,7 @@ class SessionPageState extends State<SessionPage> {
   int _remainingSeconds = 0;
   TimerMode _currentMode = TimerMode.workTime;
   int numSessionsLeft = 0;
+  Color backgroundColor = Colors.red;
 
   void setTimer(int durationMin) {
     setState(() {
@@ -54,13 +55,19 @@ class SessionPageState extends State<SessionPage> {
         _currentMode = TimerMode.breakTime;
         setTimer(appState.breakDuration);
         startTimer();
+        changeBackgroundColour(TimerMode.breakTime);
         break;
       case TimerMode.breakTime:
         _currentMode = TimerMode.workTime;
         setTimer(appState.workDuration);
         startTimer();
+        changeBackgroundColour(TimerMode.workTime);
         break;
     }
+  }
+
+  void changeBackgroundColour(TimerMode mode) {
+    backgroundColor = mode == TimerMode.workTime ? Colors.red : Colors.green;
   }
 
   String get timerText {
@@ -79,6 +86,7 @@ class SessionPageState extends State<SessionPage> {
         numSessionsLeft = appState.numSessionsTotal;
         setTimer(appState.workDuration);
         startTimer();
+        changeBackgroundColour(TimerMode.workTime);
       });
     });
   }
@@ -88,6 +96,7 @@ class SessionPageState extends State<SessionPage> {
     final appState = Provider.of<AppState>(context);
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

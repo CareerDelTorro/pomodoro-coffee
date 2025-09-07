@@ -13,13 +13,16 @@ class SessionPage extends StatefulWidget {
   SessionPageState createState() => SessionPageState();
 }
 
-class SessionPageState extends State<SessionPage> {
+class SessionPageState extends State<SessionPage>
+    with TickerProviderStateMixin {
   Timer? _timer;
   int _remainingSecondsSession = 0;
   TimerMode _currentMode = TimerMode.workTime;
   int numSessionsLeft = 0;
   Color backgroundColor = Colors.red;
   bool isRunning = false;
+  late AnimationController _lottieController;
+  bool isLottieReady = false;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
 
@@ -35,6 +38,10 @@ class SessionPageState extends State<SessionPage> {
     setState(() {
       isRunning = true;
     });
+
+    if (isLottieReady) {
+      _lottieController.repeat(); // resume animation
+    }
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       // account for 1s delay in the audio file
@@ -62,6 +69,7 @@ class SessionPageState extends State<SessionPage> {
     setState(() {
       isRunning = false;
     });
+    _lottieController.stop(); // pause animation
   }
 
   void resetCurrentTimer() {
@@ -158,6 +166,9 @@ class SessionPageState extends State<SessionPage> {
   @override
   void initState() {
     super.initState();
+
+    _lottieController = AnimationController(vsync: this);
+
     // Delay access to context until after initState using addPostFrameCallback
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final appState = Provider.of<AppState>(context, listen: false);
@@ -306,6 +317,14 @@ class SessionPageState extends State<SessionPage> {
                 SizedBox(height: 40),
                 Lottie.asset(
                   'assets/pathtree.json',
+                  controller: _lottieController,
+                  onLoaded: (composition) {
+                    _lottieController.duration = composition.duration;
+                    isLottieReady = true;
+                    if (isRunning) {
+                      _lottieController.repeat();
+                    }
+                  },
                   width: double.infinity,
                   fit: BoxFit.fitWidth,
                 ),
@@ -320,6 +339,8 @@ class SessionPageState extends State<SessionPage> {
   @override
   void dispose() {
     _timer?.cancel();
+    _lottieController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 }

@@ -183,6 +183,12 @@ class SessionPageState extends State<SessionPage> {
               onPressed: resetCurrentTimer,
               child: Text('Reset current session'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/');
+              },
+              child: Text('Back to Setup'),
+            ),
           ],
         ),
       ),

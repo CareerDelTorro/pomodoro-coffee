@@ -13,7 +13,7 @@ class SetupPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text('Set Work Duration (minutes)'),
+            Text('Set Work Duration (minutes): ${appState.workDuration}'),
             Slider(
               min: 10,
               max: 60,
@@ -24,8 +24,35 @@ class SetupPage extends StatelessWidget {
               },
             ),
             SizedBox(height: 20),
-            Text('Work Duration: ${appState.workDuration} minutes'),
+
+            Text('Set Break Duration (minutes): ${appState.breakDuration}'),
+            Slider(
+              min: 5,
+              max: 30,
+              divisions: 5,
+              value: appState.breakDuration.toDouble(),
+              onChanged: (newValue) {
+                appState.setBreakDuration(newValue.toInt());
+              },
+            ),
             SizedBox(height: 20),
+            Text('Set Number of Sessions:'),
+            DropdownButton(
+              items: List.generate(5, (index) => index + 1)
+                  .map(
+                    (numSessions) => DropdownMenuItem(
+                      value: numSessions,
+                      child: Text(numSessions.toString()),
+                    ),
+                  )
+                  .toList(),
+              value: appState.numSessions,
+              onChanged: (newValue) {
+                if (newValue != null) {
+                  appState.setNumSessions(newValue);
+                }
+              },
+            ),
             ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/session'),
               child: Text("Start"),

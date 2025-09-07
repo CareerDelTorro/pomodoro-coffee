@@ -47,7 +47,18 @@ class SessionPageState extends State<SessionPage> {
     setState(() {
       isRunning = false;
     });
-    ;
+  }
+
+  void resetCurrentTimer() {
+    final appState = Provider.of<AppState>(context, listen: false);
+    switch (_currentMode) {
+      case TimerMode.workTime:
+        setTimer(appState.workDuration);
+        break;
+      case TimerMode.breakTime:
+        setTimer(appState.breakDuration);
+        break;
+    }
   }
 
   void resolveTimerEnd() {
@@ -168,6 +179,10 @@ class SessionPageState extends State<SessionPage> {
             ),
             playPauseButton,
             Text("Expected finish time: ${formatTime(expectedFinishTime)}"),
+            ElevatedButton(
+              onPressed: resetCurrentTimer,
+              child: Text('Reset current session'),
+            ),
           ],
         ),
       ),

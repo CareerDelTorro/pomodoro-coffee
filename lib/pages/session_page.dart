@@ -69,6 +69,7 @@ class SessionPageState extends State<SessionPage>
     setState(() {
       isRunning = false;
     });
+    _audioPlayer.stop();
     _lottieController.stop(); // pause animation
   }
 
@@ -92,6 +93,7 @@ class SessionPageState extends State<SessionPage>
       switchMode(_currentMode);
     } else {
       _timer?.cancel();
+      // _audioPlayer.stop(); might be anticlimactic
       Navigator.pushNamed(context, '/results');
     }
   }
@@ -310,6 +312,7 @@ class SessionPageState extends State<SessionPage>
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
+                    _audioPlayer.stop();
                     Navigator.pushNamed(context, '/');
                   },
                   child: Text('Back to Setup'),
@@ -340,7 +343,7 @@ class SessionPageState extends State<SessionPage>
   void dispose() {
     _timer?.cancel();
     _lottieController.dispose();
-    _audioPlayer.dispose();
+    _audioPlayer.stop();
     super.dispose();
   }
 }

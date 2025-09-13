@@ -24,33 +24,59 @@ class SetupPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Focus Duration: ${appState.workDuration} minutes'),
-                Slider(
-                  min: 10,
-                  max: 60,
-                  divisions: 10,
-                  value: appState.workDuration.toDouble(),
-                  onChanged: (newValue) {
-                    appState.setWorkDuration(newValue.toInt());
-                  },
-                  inactiveColor: Color.fromARGB(
-                    255,
-                    238,
-                    242,
-                    244,
-                  ), // <-- Add this line
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTickMarkColor: Theme.of(
+                      context,
+                    ).colorScheme.secondary, // Active dots
+                    inactiveTickMarkColor: const Color.fromARGB(
+                      255,
+                      220,
+                      220,
+                      220,
+                    ), // Inactive dots
+                  ),
+                  child: Slider(
+                    min: 10,
+                    max: 60,
+                    divisions: 10,
+                    value: appState.workDuration.toDouble(),
+                    onChanged: (newValue) {
+                      appState.setWorkDuration(newValue.toInt());
+                    },
+                    inactiveColor: Color.fromARGB(
+                      255,
+                      238,
+                      242,
+                      244,
+                    ), // <-- Add this line
+                  ),
                 ),
                 SizedBox(height: 20),
 
                 Text('Break Duration: ${appState.breakDuration} minutes'),
-                Slider(
-                  min: 5,
-                  max: 30,
-                  divisions: 5,
-                  value: appState.breakDuration.toDouble(),
-                  onChanged: (newValue) {
-                    appState.setBreakDuration(newValue.toInt());
-                  },
-                  inactiveColor: Color.fromARGB(255, 238, 242, 244),
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTickMarkColor: Theme.of(
+                      context,
+                    ).colorScheme.secondary, // Active dots
+                    inactiveTickMarkColor: const Color.fromARGB(
+                      255,
+                      220,
+                      220,
+                      220,
+                    ), // Inactive dots
+                  ),
+                  child: Slider(
+                    min: 5,
+                    max: 30,
+                    divisions: 5,
+                    value: appState.breakDuration.toDouble(),
+                    onChanged: (newValue) {
+                      appState.setBreakDuration(newValue.toInt());
+                    },
+                    inactiveColor: Color.fromARGB(255, 238, 242, 244),
+                  ),
                 ),
                 SizedBox(height: 20),
                 Text('Number of Sessions:'),

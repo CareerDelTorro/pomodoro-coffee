@@ -23,6 +23,8 @@ class SessionPageState extends State<SessionPage>
   bool isRunning = false;
   late AnimationController _lottieController;
   bool isLottieReady = false;
+  bool isPlayHovered = false;
+  bool isResetHovered = false;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
 
@@ -187,25 +189,27 @@ class SessionPageState extends State<SessionPage>
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
 
-    Widget playPauseButton = isRunning
-        ? ElevatedButton(
-            onPressed: pauseTimer,
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(20),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-            ),
-            child: const Icon(Icons.pause, color: Colors.white, size: 32),
-          )
-        : ElevatedButton(
-            onPressed: startTimer,
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(20),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-            ),
-            child: const Icon(Icons.play_arrow, color: Colors.white, size: 32),
-          );
+    Widget playPauseButton = MouseRegion(
+      onEnter: (_) => setState(() => isPlayHovered = true),
+      onExit: (_) => setState(() => isPlayHovered = false),
+      child: ElevatedButton(
+        onPressed: isRunning ? pauseTimer : startTimer,
+        style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          padding: const EdgeInsets.all(20),
+          backgroundColor: isPlayHovered
+              ? Theme.of(context).colorScheme.secondary.withAlpha(
+                  (0.8 * 255).toInt(),
+                ) // 0.8 opacity
+              : Theme.of(context).colorScheme.primary,
+        ),
+        child: Icon(
+          isRunning ? Icons.pause : Icons.play_arrow,
+          color: Colors.white,
+          size: 32,
+        ),
+      ),
+    );
 
     DateTime expectedFinishTime = DateTime.now().add(
       Duration(seconds: calculateTotalTimeLeftInSeconds()),
@@ -292,17 +296,26 @@ class SessionPageState extends State<SessionPage>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: resetCurrentTimer,
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        padding: const EdgeInsets.all(20),
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                      ),
-                      child: const Icon(
-                        Icons.refresh,
-                        color: Colors.white,
-                        size: 28,
+                    MouseRegion(
+                      onEnter: (_) => setState(() => isResetHovered = true),
+                      onExit: (_) => setState(() => isResetHovered = false),
+                      child: ElevatedButton(
+                        onPressed: resetCurrentTimer,
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(20),
+                          backgroundColor: isResetHovered
+                              ? Theme.of(context).colorScheme.secondary
+                                    .withAlpha((0.8 * 255).toInt())
+                              // possibly use this code:
+                              // ? const Color(0xFF3560A1).withAlpha((0.8 * 255).toInt())
+                              : Theme.of(context).colorScheme.primary,
+                        ),
+                        child: const Icon(
+                          Icons.refresh,
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          size: 28,
+                        ),
                       ),
                     ),
                     SizedBox(width: 24), // Space between buttons

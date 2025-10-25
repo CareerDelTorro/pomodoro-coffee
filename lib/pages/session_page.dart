@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math'; // <-- added for atan2, pi
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -221,6 +222,9 @@ class SessionPageState extends State<SessionPage>
             ? appState.workDuration * 60
             : appState.breakDuration * 60);
 
+    // <-- move the declaration here (before the widget tree)
+    final double timerSize = MediaQuery.of(context).size.width * 0.6;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Column(
@@ -237,36 +241,51 @@ class SessionPageState extends State<SessionPage>
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(height: 30),
-                SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox.expand(
-                        child: CircularProgressIndicator(
-                          value: progress,
-                          strokeWidth: 10,
-                          backgroundColor: Colors.white24,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            _currentMode == TimerMode.workTime
-                                ? const Color(0xFF4AA5C1)
-                                : const Color(0xFFFAF8F4),
+                // replace existing SizedBox timer with this responsive, interactive one
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTapDown: (details) => _updateTimerFromLocalPosition(
+                    details.localPosition,
+                    timerSize,
+                  ),
+                  onPanStart: (details) => _updateTimerFromLocalPosition(
+                    details.localPosition,
+                    timerSize,
+                  ),
+                  onPanUpdate: (details) => _updateTimerFromLocalPosition(
+                    details.localPosition,
+                    timerSize,
+                  ),
+                  child: SizedBox(
+                    width: timerSize,
+                    height: timerSize,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox.expand(
+                          child: CircularProgressIndicator(
+                            value: progress,
+                            strokeWidth: 10,
+                            backgroundColor: Colors.white24,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              _currentMode == TimerMode.workTime
+                                  ? const Color(0xFF4AA5C1)
+                                  : const Color(0xFFFAF8F4),
+                            ),
                           ),
                         ),
-                      ),
-                      Text(
-                        timerText,
-                        style: TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                          //AN add colour for break time here.
-                          color: _currentMode == TimerMode.workTime
-                              ? Color(0xFF4AA5C1)
-                              : Color(0xFFFAF8F4),
+                        Text(
+                          timerText,
+                          style: TextStyle(
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold,
+                            color: _currentMode == TimerMode.workTime
+                                ? Color(0xFF4AA5C1)
+                                : Color(0xFFFAF8F4),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -358,6 +377,39 @@ class SessionPageState extends State<SessionPage>
     _lottieController.dispose();
     _audioPlayer.stop();
     super.dispose();
+  }
+
+  // Call this with a local position inside the circular timer widget.
+  void _updateTimerFromLocalPosition(Offset localPos, double widgetSize) {
+    final center = Offset(widgetSize / 2, widgetSize / 2);
+    final dx = localPos.dx - center.dx;
+    final dy = localPos.dy - center.dy;
+
+    // angle from +x axis, counter-clockwise, range -pi..pi
+    final angle = atan2(dy, dx);
+
+    // shift so 0 is at top and increase clockwise
+    double angleFromTop = angle + pi / 2;
+    if (angleFromTop < 0) angleFromTop += 2 * pi;
+
+    final fraction = angleFromTop / (2 * pi); // 0..1 around the circle
+
+    final appState = Provider.of<AppState>(context, listen: false);
+    final totalSeconds =
+        (_currentMode == TimerMode.workTime
+            ? appState.workDuration
+            : appState.breakDuration) *
+        60;
+
+    // map fraction -> remaining seconds (top = full duration)
+    final newRemaining = ((1 - fraction) * totalSeconds).round().clamp(
+      0,
+      totalSeconds,
+    );
+
+    setState(() {
+      _remainingSecondsSession = newRemaining;
+    });
   }
 }
 

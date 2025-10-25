@@ -402,7 +402,8 @@ class SessionPageState extends State<SessionPage>
         60;
 
     // map fraction -> remaining seconds (top = full duration)
-    final newRemaining = ((1 - fraction) * totalSeconds).round().clamp(
+    // Inverted mapping: top = 0, clockwise increases remaining
+    final newRemaining = (fraction * totalSeconds).round().clamp(
       0,
       totalSeconds,
     );
